@@ -46,7 +46,7 @@ fun SearchRoute(
     HandleSideEffect(vm.sideEffect) {
         when (it) {
             is SearchViewModel.SideEffect.Back -> navController.popBackStack()
-            is SearchViewModel.SideEffect.NavigateToDetail -> navController.navigate(GithubScreen.Detail)
+            is SearchViewModel.SideEffect.NavigateToDetail -> navController.navigate(GithubScreen.Detail(it.result))
         }
     }
 
@@ -58,7 +58,7 @@ fun SearchRoute(
 
 @Composable
 fun SearchContent(
-    onInteractions: (SearchViewModel.Interactions) -> Unit = {},
+    onInteractions: (SearchViewModel.Interaction) -> Unit = {},
     state: SearchViewModel.SearchState
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -115,7 +115,7 @@ fun ErrorView(
 fun SearchView(
     modifier: Modifier = Modifier,
     search: String = "",
-    onInteractions: (SearchViewModel.Interactions) -> Unit,
+    onInteractions: (SearchViewModel.Interaction) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
@@ -126,7 +126,7 @@ fun SearchView(
         TextField(
             value = search,
             onValueChange = {
-                onInteractions(SearchViewModel.Interactions.OnSearch(it))
+                onInteractions(SearchViewModel.Interaction.OnSearch(it))
             },
             placeholder = {
                 Text(
@@ -140,7 +140,7 @@ fun SearchView(
                     contentDescription = "Search",
                     tint = colors.onPrimary,
                     modifier = Modifier.clickable {
-                        onInteractions(SearchViewModel.Interactions.OnBack)
+                        onInteractions(SearchViewModel.Interaction.OnBack)
                     }
                 )
             },
@@ -151,7 +151,7 @@ fun SearchView(
                         contentDescription = "Search",
                         tint = colors.onPrimary,
                         modifier = Modifier.clickable {
-                            onInteractions(SearchViewModel.Interactions.OnClear)
+                            onInteractions(SearchViewModel.Interaction.OnClear)
                         }
                     )
             },
@@ -171,7 +171,7 @@ fun SearchView(
 @Composable
 fun SearchResults(
     results: List<SearchItemResponse>,
-    onInteractions: (SearchViewModel.Interactions) -> Unit,
+    onInteractions: (SearchViewModel.Interaction) -> Unit,
 ) {
     LazyColumn {
         items(results) {
@@ -183,7 +183,7 @@ fun SearchResults(
 @Composable
 fun SearchResultItem(
     result: SearchItemResponse,
-    onInteractions: (SearchViewModel.Interactions) -> Unit
+    onInteractions: (SearchViewModel.Interaction) -> Unit
 ) {
     ListItem(
         text = { Text(text = result.login, color = colors.primary) },
@@ -202,7 +202,7 @@ fun SearchResultItem(
             )
         },
         modifier = Modifier.clickable {
-            onInteractions(SearchViewModel.Interactions.OnResultClick(result))
+            onInteractions(SearchViewModel.Interaction.OnResultClick(result))
         }
     )
 }

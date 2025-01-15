@@ -3,22 +3,13 @@ package org.enciyo.githubkmmapp.data.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class SearchResponse(
-    @SerialName("total_count")
-    val totalCount: Int,
-    @SerialName("incomplete_results")
-    val incompleteResults: Boolean = false,
-    @SerialName("items")
-    val items: List<SearchItemResponse>
-)
 
 @Serializable
-data class SearchItemResponse(
+data class UserItemResponse(
     @SerialName("login")
     val login: String = "",
     @SerialName("id")
-    val id: Long = 1L,
+    val id: Long = 0L,
     @SerialName("node_id")
     val nodeId: String = "",
     @SerialName("avatar_url")
@@ -51,6 +42,32 @@ data class SearchItemResponse(
     val type: String = "",
     @SerialName("site_admin")
     val siteAdmin: Boolean = false,
-    @SerialName("score")
-    val score: Double = 0.0
+    @SerialName("name")
+    val name: String = "",
+    @SerialName("company")
+    val company: String = "",
+    @SerialName("blog")
+    val blog: String = "",
+    @SerialName("location")
+    val location: String = "",
+    @SerialName("email")
+    val email: String = "",
+    @SerialName("hireable")
+    val hireable: Boolean = false,
+    @SerialName("bio")
+    val bio: String = "",
+    @SerialName("twitter_username")
+    val twitterUsername: String = "",
+    @SerialName("public_repos")
+    val publicRepos: Int = 0,
+    @SerialName("public_gists")
+    val publicGists: Int = 0,
+    @SerialName("followers")
+    val followers: Int = 0,
+    @SerialName("following")
+    val following: Int = 0,
+    @SerialName("created_at")
+    val createdAt: String = "",
+    @SerialName("updated_at")
+    val updatedAt: String = ""
 )

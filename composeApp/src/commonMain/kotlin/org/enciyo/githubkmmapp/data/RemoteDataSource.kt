@@ -4,12 +4,13 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.resources.*
-import io.ktor.client.statement.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import org.enciyo.githubkmmapp.data.model.SearchResponse
+import org.enciyo.githubkmmapp.data.model.UserItemResponse
 import org.enciyo.githubkmmapp.data.resources.SearchResource
+import org.enciyo.githubkmmapp.data.resources.UsersResource
 
 
 class RemoteDataSource(private val client: HttpClient) {
@@ -28,13 +29,24 @@ class RemoteDataSource(private val client: HttpClient) {
         ).body<SearchResponse>()
     }
 
+    suspend fun userDetail(username: String) = safeApiCall {
+        client.get(
+            UsersResource.Username(
+                username = username
+            )
+        )
+            .body<UserItemResponse>()
+
+    }
+
+
     private suspend fun <T> safeApiCall(block: suspend () -> T): Result<T> = withContext(Dispatchers.IO) {
         return@withContext try {
             Result.success(block.invoke())
         } catch (e: Exception) {
+            println("Error: ${e.message}")
             when (e) {
                 is ClientRequestException -> Result.failure(e)
-
                 else -> Result.failure(e)
             }
         }

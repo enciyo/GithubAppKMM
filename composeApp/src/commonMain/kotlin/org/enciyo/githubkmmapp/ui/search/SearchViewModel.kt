@@ -25,13 +25,13 @@ class SearchViewModel(
     }
 
 
-    fun onInteraction(interact: Interactions) {
+    fun onInteraction(interact: Interaction) {
         when (interact) {
-            is Interactions.OnBack -> _sideEffect.tryEmit(SideEffect.Back)
-            is Interactions.OnClear -> _state.update { it.copy(keyword = "") }
-            is Interactions.OnSearch -> onSearch(interact.keyword)
-            is Interactions.OnResultClick -> {
-                _sideEffect.tryEmit(SideEffect.NavigateToDetail(interact.result.url))
+            is Interaction.OnBack -> _sideEffect.tryEmit(SideEffect.Back)
+            is Interaction.OnClear -> _state.update { it.copy(keyword = "") }
+            is Interaction.OnSearch -> onSearch(interact.keyword)
+            is Interaction.OnResultClick -> {
+                _sideEffect.tryEmit(SideEffect.NavigateToDetail(interact.result.login))
             }
         }
     }
@@ -56,11 +56,11 @@ class SearchViewModel(
     }
 
 
-    sealed interface Interactions {
-        data object OnBack : Interactions
-        data class OnSearch(val keyword: String) : Interactions
-        data object OnClear : Interactions
-        data class OnResultClick(val result: SearchItemResponse) : Interactions
+    sealed interface Interaction {
+        data object OnBack : Interaction
+        data class OnSearch(val keyword: String) : Interaction
+        data object OnClear : Interaction
+        data class OnResultClick(val result: SearchItemResponse) : Interaction
     }
 
     sealed interface SideEffect {

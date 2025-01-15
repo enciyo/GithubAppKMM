@@ -12,3 +12,5 @@ class SearchResource {
         val per_page: Int? = null
     )
 }
+
+

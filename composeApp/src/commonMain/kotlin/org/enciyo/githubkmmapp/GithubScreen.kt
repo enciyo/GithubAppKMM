@@ -23,21 +23,20 @@ sealed class GithubScreen(val title: String) {
     data object Search : GithubScreen(String.Empty)
 
     @Serializable
-    data object Detail : GithubScreen(String.Empty)
+    data class Detail(val username: String) : GithubScreen(username)
 
 
 }
 
 fun NavBackStackEntry.toGithubScreen(): GithubScreen? {
-    val routeMap = mapOf(
-        GithubScreen.Home::class to GithubScreen.Home,
-        GithubScreen.Favorite::class to GithubScreen.Favorite,
-        GithubScreen.Profile::class to GithubScreen.Profile,
-        GithubScreen.Search::class to GithubScreen.Search,
-        GithubScreen.Detail::class to GithubScreen.Detail
-    )
-
-    return routeMap.entries.first { destination.hasRoute(it.key) }.value
+    return when {
+        destination.hasRoute<GithubScreen.Home>() -> toRoute<GithubScreen.Home>()
+        destination.hasRoute<GithubScreen.Favorite>() -> toRoute<GithubScreen.Favorite>()
+        destination.hasRoute<GithubScreen.Profile>() -> toRoute<GithubScreen.Profile>()
+        destination.hasRoute<GithubScreen.Search>() -> toRoute<GithubScreen.Search>()
+        destination.hasRoute<GithubScreen.Detail>() -> toRoute<GithubScreen.Detail>()
+        else -> null
+    }
 }
 
 
